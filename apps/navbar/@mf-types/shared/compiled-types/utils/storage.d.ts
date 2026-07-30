@@ -1,0 +1,10 @@
+export declare const getAccessToken: () => string | null;
+export declare const setAccessToken: (token: string) => void;
+export declare const removeAccessToken: () => void;
+export declare const getRefreshToken: () => string | null;
+export declare const setRefreshToken: (token: string) => void;
+export declare const removeRefreshToken: () => void;
+export declare const getUser: () => Record<string, unknown> | null;
+export declare const setUser: (user: Record<string, unknown>) => void;
+export declare const removeUser: () => void;
+export declare const clearAuth: () => void;

@@ -1,0 +1,10 @@
+{
+  "latestErrorEvent": {
+    "code": "TYPE-001",
+    "message": "Failed to generate type declaration. Execute the below cmd to reproduce and fix the error. #TYPE-001\nargs: {\"cmd\":\"/Users/sonminhphu/.nvm/versions/node/v20.20.2/bin/node /Users/sonminhphu/PhuSM/Project/micro-fe/micro-module-federation/node_modules/.pnpm/typescript@5.9.3/node_modules/typescript/bin/tsc --project /Users/sonminhphu/PhuSM/Project/micro-fe/micro-module-federation/apps/auth/node_modules/.federation/tsconfig.962f1d95c365289656582e79ed18da77.json\"}\nView the docs to see how to solve: https://module-federation.io/guide/troubleshooting/type#type-001",
+    "args": {
+      "cmd": "/Users/sonminhphu/.nvm/versions/node/v20.20.2/bin/node /Users/sonminhphu/PhuSM/Project/micro-fe/micro-module-federation/node_modules/.pnpm/typescript@5.9.3/node_modules/typescript/bin/tsc --project /Users/sonminhphu/PhuSM/Project/micro-fe/micro-module-federation/apps/auth/node_modules/.federation/tsconfig.962f1d95c365289656582e79ed18da77.json"
+    },
+    "timestamp": 1785333645330
+  }
+}

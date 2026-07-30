@@ -1,0 +1,3 @@
+
+    export type RemoteKeys = 'auth/LoginPage' | 'auth/RegisterPage' | 'auth/ForgotPasswordPage' | 'auth/ResetPasswordPage';
+    type PackageType<T> = T extends 'auth/ResetPasswordPage' ? typeof import('auth/ResetPasswordPage') :T extends 'auth/ForgotPasswordPage' ? typeof import('auth/ForgotPasswordPage') :T extends 'auth/RegisterPage' ? typeof import('auth/RegisterPage') :T extends 'auth/LoginPage' ? typeof import('auth/LoginPage') :any;
