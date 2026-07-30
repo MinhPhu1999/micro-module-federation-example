@@ -1,5 +1,7 @@
+**/@mf-types
+.mf/
 .env
-.env.local
+.env.*
 *.log*
 node_modules/
 dist/
