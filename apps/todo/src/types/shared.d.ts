@@ -285,6 +285,11 @@ declare module 'shared/formatDate' {
   export function formatDate(date: string | Date, locale?: string): string
 }
 
+declare module 'shared/fieldError' {
+  import type { TFunction } from 'i18next'
+  export function fieldError(t: TFunction, message?: string): string | undefined
+}
+
 declare module 'shared/Toast' {
   export const Toast: () => JSX.Element
 }

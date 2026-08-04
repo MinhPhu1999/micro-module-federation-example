@@ -7,6 +7,7 @@ import { Input } from 'shared/Input'
 import { Button } from 'shared/Button'
 import { useToast } from 'shared/ToastContext'
 import { useResetPasswordMutation } from 'shared/useResetPasswordMutation'
+import { fieldError } from 'shared/fieldError'
 import { resetPasswordSchema } from 'shared/schemas'
 import type { ResetPasswordForm } from 'shared/types'
 import { AuthLayout } from '../layouts/AuthLayout'
@@ -49,7 +50,7 @@ export const ResetPasswordPage = () => {
           type="email"
           autoComplete="email"
           {...register('email')}
-          error={errors.email?.message}
+          error={fieldError(t, errors.email?.message)}
         />
         <Input
           label={t('auth.otp')}
@@ -57,21 +58,21 @@ export const ResetPasswordPage = () => {
           autoComplete="one-time-code"
           maxLength={6}
           {...register('otp')}
-          error={errors.otp?.message}
+          error={fieldError(t, errors.otp?.message)}
         />
         <Input
           label={t('auth.new_password')}
           type="password"
           autoComplete="new-password"
           {...register('newPassword')}
-          error={errors.newPassword?.message}
+          error={fieldError(t, errors.newPassword?.message)}
         />
         <Input
           label={t('auth.confirm_password')}
           type="password"
           autoComplete="new-password"
           {...register('confirmNewPassword')}
-          error={errors.confirmNewPassword?.message}
+          error={fieldError(t, errors.confirmNewPassword?.message)}
         />
         <Button type="submit" isLoading={resetPasswordMutation.isPending} disabled={!isValid || resetPasswordMutation.isPending} className="auth-w-full">
           {t('auth.reset_password')}

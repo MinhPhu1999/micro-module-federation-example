@@ -23,11 +23,11 @@ function getInitialTheme(): Theme {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null)
 
+const DARK_CLASSES = ['dark', 'sh-dark', 'navbar-dark', 'auth-dark', 'todo-dark']
+const LIGHT_CLASSES = ['light', 'sh-light', 'navbar-light', 'auth-light', 'todo-light']
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(getInitialTheme)
-
-  const DARK_CLASSES = ['dark', 'sh-dark', 'navbar-dark', 'auth-dark', 'todo-dark']
-  const LIGHT_CLASSES = ['light', 'sh-light', 'navbar-light', 'auth-light', 'todo-light']
 
   useEffect(() => {
     const root = document.documentElement

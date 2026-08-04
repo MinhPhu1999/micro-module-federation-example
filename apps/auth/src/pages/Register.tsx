@@ -6,6 +6,7 @@ import { Input } from 'shared/Input'
 import { Button } from 'shared/Button'
 import { useToast } from 'shared/ToastContext'
 import { useRegisterMutation } from 'shared/useRegisterMutation'
+import { fieldError } from 'shared/fieldError'
 import { registerSchema } from 'shared/schemas'
 import type { RegisterForm } from 'shared/types'
 import { AuthLayout } from '../layouts/AuthLayout'
@@ -39,28 +40,28 @@ export const RegisterPage = () => {
         <Input
           label={t('auth.name')}
           {...register('name')}
-          error={errors.name?.message}
+          error={fieldError(t, errors.name?.message)}
         />
         <Input
           label={t('auth.email')}
           type="email"
           autoComplete="email"
           {...register('email')}
-          error={errors.email?.message}
+          error={fieldError(t, errors.email?.message)}
         />
         <Input
           label={t('auth.password')}
           type="password"
           autoComplete="new-password"
           {...register('password')}
-          error={errors.password?.message}
+          error={fieldError(t, errors.password?.message)}
         />
         <Input
           label={t('auth.confirm_password')}
           type="password"
           autoComplete="new-password"
           {...register('confirmPassword')}
-          error={errors.confirmPassword?.message}
+          error={fieldError(t, errors.confirmPassword?.message)}
         />
         <Button type="submit" isLoading={registerMutation.isPending} disabled={!isValid || registerMutation.isPending} className="auth-w-full">
           {t('auth.register')}

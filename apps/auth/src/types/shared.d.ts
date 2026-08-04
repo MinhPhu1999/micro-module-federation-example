@@ -138,3 +138,8 @@ declare module 'shared/I18nContext' {
   export function I18nProvider({ children }: { children: ReactNode }): JSX.Element
   export function useI18n(): { locale: string; setLocale: (locale: string) => void; t: (key: string) => string }
 }
+
+declare module 'shared/fieldError' {
+  import type { TFunction } from 'i18next'
+  export function fieldError(t: TFunction, message?: string): string | undefined
+}

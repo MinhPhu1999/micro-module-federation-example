@@ -4,7 +4,7 @@ import { Dropdown } from './Dropdown'
 import '../index.css'
 
 export const LanguageSwitcher = () => {
-  const { locale, setLocale, t } = useI18n()
+  const { locale, setLocale } = useI18n()
 
   const items = [
     { value: 'en', label: 'English', icon: '🇺🇸' },

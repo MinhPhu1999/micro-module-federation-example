@@ -6,6 +6,7 @@ import { Input } from 'shared/Input'
 import { Button } from 'shared/Button'
 import { useToast } from 'shared/ToastContext'
 import { useForgotPasswordMutation } from 'shared/useForgotPasswordMutation'
+import { fieldError } from 'shared/fieldError'
 import { forgotPasswordSchema } from 'shared/schemas'
 import type { ForgotPasswordForm } from 'shared/types'
 import { AuthLayout } from '../layouts/AuthLayout'
@@ -41,7 +42,7 @@ export const ForgotPasswordPage = () => {
           type="email"
           autoComplete="email"
           {...register('email')}
-          error={errors.email?.message}
+          error={fieldError(t, errors.email?.message)}
         />
         <Button type="submit" isLoading={forgotPasswordMutation.isPending} disabled={!isValid || forgotPasswordMutation.isPending} className="auth-w-full">
           {t('auth.forgot_password')}

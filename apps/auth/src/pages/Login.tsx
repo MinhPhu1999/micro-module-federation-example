@@ -10,6 +10,7 @@ import { useToast } from 'shared/ToastContext'
 import { useAuth } from 'shared/AuthContext'
 import { authApi } from 'shared/authApi'
 import { useLoginMutation } from 'shared/useLoginMutation'
+import { fieldError } from 'shared/fieldError'
 import { loginSchema } from 'shared/schemas'
 import type { LoginForm } from 'shared/types'
 import { AuthLayout } from '../layouts/AuthLayout'
@@ -69,14 +70,14 @@ export const LoginPage = () => {
           type="email"
           autoComplete="email"
           {...register('email')}
-          error={errors.email?.message}
+          error={fieldError(t, errors.email?.message)}
         />
         <Input
           label={t('auth.password')}
           type="password"
           autoComplete="current-password"
           {...register('password')}
-          error={errors.password?.message}
+          error={fieldError(t, errors.password?.message)}
         />
         <Button type="submit" isLoading={loginMutation.isPending} disabled={!isValid || loginMutation.isPending} className="auth-w-full">
           {t('auth.login')}

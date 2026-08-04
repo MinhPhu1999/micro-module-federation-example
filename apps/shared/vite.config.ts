@@ -52,6 +52,7 @@ export default defineConfig({
         './types': './src/types/index.ts',
         './formatDate': './src/utils/formatDate.ts',
         './formatCurrency': './src/utils/formatCurrency.ts',
+        './fieldError': './src/utils/fieldError.ts',
         './storage': './src/utils/storage.ts',
         './constants': './src/constants/index.ts',
         './i18n': './src/i18n',

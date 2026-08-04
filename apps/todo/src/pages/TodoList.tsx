@@ -14,8 +14,7 @@ import { ConfirmDialog } from 'shared/ConfirmDialog'
 import { Skeleton } from 'shared/Skeleton'
 import { TodoTable } from '../components/TodoTable'
 import { TodoFilters } from '../components/TodoFilters'
-import { CreateTodoModal } from '../components/CreateTodoModal'
-import { EditTodoModal } from '../components/EditTodoModal'
+import { TodoFormModal } from '../components/TodoFormModal'
 import '../index.css'
 
 export const TodoListPage = () => {
@@ -96,8 +95,8 @@ export const TodoListPage = () => {
         />
       )}
 
-      <CreateTodoModal open={createOpen} onClose={() => setCreateOpen(false)} />
-      <EditTodoModal todoId={editingTodo} onClose={() => setEditingTodo(null)} />
+      <TodoFormModal mode="create" open={createOpen} onClose={() => setCreateOpen(false)} />
+      <TodoFormModal mode="edit" open={!!editingTodo} todoId={editingTodo} onClose={() => setEditingTodo(null)} />
       <ConfirmDialog
         isOpen={!!deleteTarget}
         title={t('todo.delete_title')}
