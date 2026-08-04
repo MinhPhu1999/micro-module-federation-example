@@ -19,7 +19,7 @@ interface TableProps<T> {
   isLoading?: boolean
 }
 
-export function Table<T extends Record<string, unknown>>({
+export function Table<T extends object>({
   columns,
   data,
   onSort,
@@ -71,14 +71,14 @@ export function Table<T extends Record<string, unknown>>({
           ) : (
             data.map((row, i) => (
               <tr
-                key={row.id as string || i}
+                key={(row as Record<string, unknown>).id as string || i}
                 className={`sh-border-b sh-border-gray-100 dark:sh-border-gray-800 ${
                   i % 2 === 0 ? 'sh-bg-white dark:sh-bg-gray-800' : 'sh-bg-gray-50 dark:sh-bg-gray-900'
                 }`}
               >
                 {columns.map((col) => (
                   <td key={col.key} className="sh-px-4 sh-py-3 sh-text-gray-700 dark:sh-text-gray-300">
-                    {col.render ? col.render(row) : (row[col.key] as ReactNode)}
+                    {col.render ? col.render(row) : ((row as Record<string, unknown>)[col.key] as ReactNode)}
                   </td>
                 ))}
               </tr>

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Table } from 'shared/Table'
+import { Table, type Column } from 'shared/Table'
 import { Button } from 'shared/Button'
 import { formatDate } from 'shared/formatDate'
 import type { Todo } from 'shared/types'
@@ -13,7 +13,7 @@ interface TodoTableProps {
 export const TodoTable = ({ todos, onEdit, onDelete }: TodoTableProps) => {
   const { t } = useTranslation()
 
-  const columns = [
+  const columns: Column<Todo>[] = [
     { key: 'title', header: t('todo.title') },
     {
       key: 'completed',
@@ -43,5 +43,5 @@ export const TodoTable = ({ todos, onEdit, onDelete }: TodoTableProps) => {
     },
   ]
 
-  return <Table columns={columns} data={todos} />
+  return <Table<Todo> columns={columns} data={todos} />
 }
