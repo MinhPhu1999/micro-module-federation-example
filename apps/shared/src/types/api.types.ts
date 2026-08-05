@@ -22,6 +22,11 @@ export interface ApiSuccess<T> {
   data: T
 }
 
+export interface ApiMessageResponse {
+  success: true
+  message?: string
+}
+
 export interface ApiListResponse<T> {
   success: true
   data: T[]

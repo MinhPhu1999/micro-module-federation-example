@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
 import type { User, AuthPayload } from '@/types'
-import { getAccessToken, setAccessToken, setRefreshToken, setUser, clearAuth } from '@/utils/storage'
+import { getAccessToken, getRefreshToken, setAccessToken, setRefreshToken, setUser, clearAuth } from '@/utils/storage'
 import { authApi } from '@/services/auth'
 
 interface AuthState {
@@ -11,7 +11,7 @@ interface AuthState {
 
 interface AuthContextValue extends AuthState {
   login: (payload: AuthPayload) => void
-  logout: () => void
+  logout: () => Promise<void>
   updateUser: (user: User) => void
 }
 
@@ -48,7 +48,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setState({ user: payload.user, isAuthenticated: true, isLoading: false })
   }, [])
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    const refreshToken = getRefreshToken()
+    if (refreshToken) {
+      await authApi.logout({ refresh_token: refreshToken }).catch(() => undefined)
+    }
     clearAuth()
     setState({ user: null, isAuthenticated: false, isLoading: false })
   }, [])

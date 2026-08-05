@@ -9,15 +9,38 @@ import { useCreateTodo } from 'shared/useCreateTodo'
 import { useUpdateTodo } from 'shared/useUpdateTodo'
 import { useToast } from 'shared/ToastContext'
 import { createTodoSchema, updateTodoSchema } from 'shared/schemas'
-import type { Todo } from 'shared/types'
+import type { Todo, TodoPriority } from 'shared/types'
 
 export interface TodoFormValues {
   title: string
   description: string
   completed: boolean
+  priority: TodoPriority
+  tags: string
+  due_at: string
 }
 
-const EMPTY_FORM: TodoFormValues = { title: '', description: '', completed: false }
+const EMPTY_FORM: TodoFormValues = {
+  title: '',
+  description: '',
+  completed: false,
+  priority: 'low',
+  tags: '',
+  due_at: '',
+}
+
+const toDateTimeLocal = (value: string | null | undefined): string => {
+  if (!value) return ''
+  const d = new Date(value)
+  if (isNaN(d.getTime())) return ''
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
+const parseTags = (value: string): string[] | undefined => {
+  const tags = [...new Set(value.split(',').map((tag) => tag.trim().slice(0, 50)).filter(Boolean))]
+  return tags.length ? tags.slice(0, 20) : undefined
+}
 
 interface UseTodoFormModalOptions {
   mode: 'create' | 'edit'
@@ -61,6 +84,9 @@ export function useTodoFormModal({ mode, open, todoId, onClose }: UseTodoFormMod
       title: currentTodo.title,
       description: currentTodo.description ?? '',
       completed: currentTodo.completed,
+      priority: currentTodo.priority ?? 'low',
+      tags: currentTodo.tags?.join(', ') ?? '',
+      due_at: toDateTimeLocal(currentTodo.due_at),
     }
   }, [isEdit, currentTodo])
 
@@ -76,16 +102,8 @@ export function useTodoFormModal({ mode, open, todoId, onClose }: UseTodoFormMod
     const justOpened = open && !wasOpenRef.current
     wasOpenRef.current = open
     if (!justOpened) return
-    if (isEdit && currentTodo) {
-      form.reset({
-        title: currentTodo.title,
-        description: currentTodo.description ?? '',
-        completed: currentTodo.completed,
-      })
-    } else {
-      form.reset(EMPTY_FORM)
-    }
-  }, [open, isEdit, currentTodo, form])
+    form.reset(formValues ?? EMPTY_FORM)
+  }, [open, isEdit, currentTodo, form, formValues])
 
   const handleClose = useCallback(() => {
     form.reset(EMPTY_FORM)
@@ -98,13 +116,22 @@ export function useTodoFormModal({ mode, open, todoId, onClose }: UseTodoFormMod
         title: values.title,
         description: values.description || undefined,
         completed: values.completed,
+        priority: values.priority,
+        tags: parseTags(values.tags),
+        due_at: values.due_at ? new Date(values.due_at).toISOString() : null,
       }
       try {
         if (isEdit && todoId) {
           await updateMutation.mutateAsync({ id: todoId, data: payload })
           toast.success(t('todo.update_success'))
         } else {
-          await createMutation.mutateAsync({ title: payload.title, description: payload.description })
+          await createMutation.mutateAsync({
+            title: payload.title,
+            description: payload.description,
+            priority: payload.priority,
+            tags: payload.tags,
+            due_at: payload.due_at,
+          })
           toast.success(t('todo.create_success'))
         }
         handleClose()

@@ -17,7 +17,7 @@ export const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const handleLogout = () => {
-    logout()
+    void logout()
     navigate('/login', { replace: true })
   }
 

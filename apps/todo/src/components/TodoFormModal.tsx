@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Modal } from 'shared/Modal'
 import { Input } from 'shared/Input'
 import { TextArea } from 'shared/TextArea'
+import { Select } from 'shared/Select'
 import { Checkbox } from 'shared/Checkbox'
 import { Button } from 'shared/Button'
 import { Spinner } from 'shared/Spinner'
@@ -44,6 +45,24 @@ export const TodoFormModal = ({ mode, open, todoId = null, onClose }: TodoFormMo
         <form onSubmit={handleSubmit(submit)} className="todo-space-y-4">
           <Input label={t('todo.title')} {...register('title')} error={fieldError(t, errors.title?.message)} />
           <TextArea label={t('todo.description')} {...register('description')} error={fieldError(t, errors.description?.message)} />
+          <Controller
+            name="priority"
+            control={control}
+            render={({ field }) => (
+              <Select
+                label={t('todo.priority')}
+                value={field.value}
+                onChange={field.onChange}
+                options={[
+                  { value: 'low', label: t('todo.priority_low') },
+                  { value: 'medium', label: t('todo.priority_medium') },
+                  { value: 'high', label: t('todo.priority_high') },
+                ]}
+              />
+            )}
+          />
+          <Input label={t('todo.tags')} placeholder={t('todo.tags_placeholder')} {...register('tags')} error={fieldError(t, errors.tags?.message)} />
+          <Input label={t('todo.due_at')} type="datetime-local" {...register('due_at')} />
           {isEdit && (
             <Controller
               name="completed"

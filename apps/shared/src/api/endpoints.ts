@@ -9,6 +9,7 @@ export const AUTH_ENDPOINTS = {
   googleCallback: () => `${API_PREFIX}/auth/google/callback`,
   me: () => `${API_PREFIX}/auth/me`,
   refresh: () => `${API_PREFIX}/auth/refresh`,
+  logout: () => `${API_PREFIX}/auth/logout`,
 } as const
 
 export const TODO_ENDPOINTS = {
@@ -17,4 +18,9 @@ export const TODO_ENDPOINTS = {
   create: () => `${API_PREFIX}/todos`,
   update: (id: string) => `${API_PREFIX}/todos/${id}`,
   delete: (id: string) => `${API_PREFIX}/todos/${id}`,
+  restore: (id: string) => `${API_PREFIX}/todos/${id}`,
+  bulkCreate: () => `${API_PREFIX}/todos/bulk`,
+  bulkUpdate: () => `${API_PREFIX}/todos/bulk`,
+  bulkDelete: () => `${API_PREFIX}/todos/bulk`,
+  stats: () => `${API_PREFIX}/todos/stats`,
 } as const

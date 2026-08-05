@@ -5,6 +5,7 @@ import type {
   LoginRequest,
   ForgotPasswordRequest,
   ResetPasswordRequest,
+  RefreshTokenRequest,
   AuthPayload,
   ApiSuccess,
 } from '@/types'
@@ -30,4 +31,7 @@ export const authApi = {
 
   getMe: () =>
     apiClient.get<ApiSuccess<AuthPayload['user']>>(AUTH_ENDPOINTS.me()),
+
+  logout: (data: RefreshTokenRequest) =>
+    apiClient.post<ApiSuccess<{ message: string }>>(AUTH_ENDPOINTS.logout(), data),
 }

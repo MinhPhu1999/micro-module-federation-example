@@ -9,6 +9,9 @@ export const createTodoSchema = z.object({
     .string()
     .max(2000, 'validation.description_max')
     .optional(),
+  priority: z.enum(['low', 'medium', 'high']).optional(),
+  tags: z.string().max(1000, 'validation.tags_max').optional(),
+  due_at: z.string().optional(),
 })
 
 export const updateTodoSchema = z.object({
@@ -22,6 +25,9 @@ export const updateTodoSchema = z.object({
     .max(2000, 'validation.description_max')
     .optional(),
   completed: z.boolean().optional(),
+  priority: z.enum(['low', 'medium', 'high']).optional(),
+  tags: z.string().max(1000, 'validation.tags_max').optional(),
+  due_at: z.string().optional(),
 }).refine(
   (data) => Object.keys(data).length > 0,
   { message: 'validation.at_least_one_field' }

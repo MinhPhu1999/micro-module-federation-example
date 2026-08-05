@@ -3,7 +3,7 @@
   "info": {
     "title": "TO-DO List API",
     "description": "MongoDB/Postgres-backed TO-DO List API with email/password and Google sign-in, password reset via email OTP.",
-    "version": "1.3.0"
+    "version": "1.7.0"
   },
   "servers": [
     {
@@ -18,7 +18,7 @@
     },
     {
       "name": "Auth",
-      "description": "Registration, login, password reset, Google sign-in, current user, and token refresh"
+      "description": "Registration, login, password reset, Google sign-in, current user, token refresh, and sign out"
     },
     {
       "name": "Todos",
@@ -37,6 +37,36 @@
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/HealthResponse" },
                 "example": { "success": true, "message": "ok" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ready": {
+      "get": {
+        "tags": ["Health"],
+        "summary": "Check API readiness",
+        "description": "Returns 200 when the configured database is reachable, 503 otherwise.",
+        "responses": {
+          "200": {
+            "description": "API is ready",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HealthResponse" },
+                "example": { "success": true, "message": "ok" }
+              }
+            }
+          },
+          "503": {
+            "description": "Database is not reachable",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "example": {
+                  "success": false,
+                  "error": { "code": "NOT_READY", "message": "service is not ready" }
+                }
               }
             }
           }
@@ -64,6 +94,7 @@
           "201": { "$ref": "#/components/responses/AuthSuccess" },
           "400": { "$ref": "#/components/responses/BadRequest" },
           "409": { "$ref": "#/components/responses/Conflict" },
+          "429": { "$ref": "#/components/responses/RateLimited" },
           "500": { "$ref": "#/components/responses/InternalServerError" }
         }
       }
@@ -89,6 +120,7 @@
           "400": { "$ref": "#/components/responses/BadRequest" },
           "401": { "$ref": "#/components/responses/Unauthorized" },
           "403": { "$ref": "#/components/responses/AccountLocked" },
+          "429": { "$ref": "#/components/responses/RateLimited" },
           "500": { "$ref": "#/components/responses/InternalServerError" }
         }
       }
@@ -118,6 +150,7 @@
             }
           },
           "400": { "$ref": "#/components/responses/BadRequest" },
+          "429": { "$ref": "#/components/responses/RateLimited" },
           "500": { "$ref": "#/components/responses/InternalServerError" }
         }
       }
@@ -151,6 +184,7 @@
             }
           },
           "400": { "$ref": "#/components/responses/BadRequest" },
+          "429": { "$ref": "#/components/responses/RateLimited" },
           "500": { "$ref": "#/components/responses/InternalServerError" }
         }
       }
@@ -221,6 +255,39 @@
           "200": { "$ref": "#/components/responses/AuthSuccess" },
           "400": { "$ref": "#/components/responses/BadRequest" },
           "401": { "$ref": "#/components/responses/InvalidRefreshToken" },
+          "429": { "$ref": "#/components/responses/RateLimited" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Sign out and revoke refresh token",
+        "description": "Revokes the presented refresh token. Once revoked, the token can no longer be used to obtain a new access token pair.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RefreshTokenRequest" },
+              "example": {
+                "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Signed out",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MessageResponse" },
+                "example": { "success": true, "message": "signed out" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/InvalidRefreshToken" },
           "500": { "$ref": "#/components/responses/InternalServerError" }
         }
       }
@@ -255,7 +322,10 @@
               "schema": { "$ref": "#/components/schemas/CreateTodoRequest" },
               "example": {
                 "title": "Learn Swagger",
-                "description": "Call the API from the browser."
+                "description": "Call the API from the browser.",
+                "priority": "high",
+                "tags": ["docs", "api"],
+                "due_at": "2026-08-10T12:00:00Z"
               }
             }
           }
@@ -299,6 +369,55 @@
             "required": false,
             "description": "Case-insensitive search text matched against title and description",
             "schema": { "type": "string", "example": "api" }
+          },
+          {
+            "name": "priority",
+            "in": "query",
+            "required": false,
+            "description": "Filter todos by priority (low, medium, high)",
+            "schema": { "type": "string", "enum": ["low", "medium", "high"], "example": "high" }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "required": false,
+            "description": "Comma-separated tags; todos must match all of them",
+            "schema": { "type": "string", "example": "work,urgent" }
+          },
+          {
+            "name": "dueFrom",
+            "in": "query",
+            "required": false,
+            "description": "Include only todos due at or after this RFC3339 timestamp",
+            "schema": { "type": "string", "format": "date-time", "example": "2026-08-01T00:00:00Z" }
+          },
+          {
+            "name": "dueTo",
+            "in": "query",
+            "required": false,
+            "description": "Include only todos due at or before this RFC3339 timestamp",
+            "schema": { "type": "string", "format": "date-time", "example": "2026-08-31T23:59:59Z" }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "description": "Field to sort by (created_at, due_at, priority, title)",
+            "schema": { "type": "string", "enum": ["created_at", "due_at", "priority", "title"], "default": "created_at", "example": "due_at" }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "description": "Sort direction (asc, desc)",
+            "schema": { "type": "string", "enum": ["asc", "desc"], "default": "desc", "example": "asc" }
+          },
+          {
+            "name": "includeDeleted",
+            "in": "query",
+            "required": false,
+            "description": "Include soft-deleted todos in the result so they can be restored",
+            "schema": { "type": "boolean", "default": false, "example": true }
           }
         ],
         "responses": {
@@ -311,6 +430,97 @@
             }
           },
           "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/api/v1/todos/bulk": {
+      "post": {
+        "tags": ["Todos"],
+        "summary": "Bulk create todos",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/BulkCreateTodosRequest" },
+              "example": {
+                "todos": [
+                  { "title": "First task", "priority": "high" },
+                  { "title": "Second task", "tags": ["work"], "due_at": "2026-08-15T12:00:00Z" }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "$ref": "#/components/responses/TodoBulkSuccess" },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      },
+      "patch": {
+        "tags": ["Todos"],
+        "summary": "Bulk update todos",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/BulkUpdateTodosRequest" },
+              "example": {
+                "todos": [
+                  { "id": "665000000000000000000101", "completed": true },
+                  { "id": "665000000000000000000102", "priority": "high" }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "$ref": "#/components/responses/TodoBulkSuccess" },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      },
+      "delete": {
+        "tags": ["Todos"],
+        "summary": "Bulk delete todos",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/BulkDeleteTodosRequest" },
+              "example": { "ids": ["665000000000000000000101", "665000000000000000000102"] }
+            }
+          }
+        },
+        "responses": {
+          "200": { "$ref": "#/components/responses/BulkDeleteSuccess" },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/api/v1/todos/stats": {
+      "get": {
+        "tags": ["Todos"],
+        "summary": "Get todo statistics",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Todo statistics",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TodoStatsResponse" }
+              }
+            }
+          },
           "401": { "$ref": "#/components/responses/Unauthorized" },
           "500": { "$ref": "#/components/responses/InternalServerError" }
         }
@@ -355,10 +565,24 @@
       "delete": {
         "tags": ["Todos"],
         "summary": "Delete a todo",
+        "description": "Soft delete: the todo is hidden from list, detail, and stats endpoints until restored.",
         "security": [{ "BearerAuth": [] }],
         "parameters": [{ "$ref": "#/components/parameters/TodoID" }],
         "responses": {
           "200": { "$ref": "#/components/responses/Deleted" },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      },
+      "post": {
+        "tags": ["Todos"],
+        "summary": "Restore a deleted todo",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [{ "$ref": "#/components/parameters/TodoID" }],
+        "responses": {
+          "200": { "$ref": "#/components/responses/TodoRestored" },
           "400": { "$ref": "#/components/responses/BadRequest" },
           "401": { "$ref": "#/components/responses/Unauthorized" },
           "404": { "$ref": "#/components/responses/NotFound" },
@@ -401,6 +625,40 @@
         "content": {
           "application/json": {
             "schema": { "$ref": "#/components/schemas/TodoResponse" }
+          }
+        }
+      },
+      "TodoBulkSuccess": {
+        "description": "Bulk todo response",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/TodoBulkResponse" }
+          }
+        }
+      },
+      "TodoRestored": {
+        "description": "Todo restored",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/TodoResponse" },
+            "example": {
+              "success": true,
+              "message": "restored",
+              "data": { "id": "665000000000000000000101" }
+            }
+          }
+        }
+      },
+      "BulkDeleteSuccess": {
+        "description": "Bulk delete response",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/BulkDeleteResultResponse" },
+            "example": {
+              "success": true,
+              "message": "deleted",
+              "data": { "deleted": 2 }
+            }
           }
         }
       },
@@ -520,6 +778,18 @@
             }
           }
         }
+      },
+      "RateLimited": {
+        "description": "Too many requests from this client IP",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+            "example": {
+              "success": false,
+              "error": { "code": "RATE_LIMITED", "message": "too many requests, please try again later" }
+            }
+          }
+        }
       }
     },
     "schemas": {
@@ -568,7 +838,66 @@
         "required": ["title"],
         "properties": {
           "title": { "type": "string", "maxLength": 160, "example": "Learn Swagger" },
-          "description": { "type": "string", "maxLength": 2000, "example": "Call the API from the browser." }
+          "description": { "type": "string", "maxLength": 2000, "example": "Call the API from the browser." },
+          "priority": { "type": "string", "enum": ["low", "medium", "high"], "default": "low", "example": "high" },
+          "tags": { "type": "array", "items": { "type": "string", "maxLength": 50 }, "maxItems": 20, "example": ["docs", "api"] },
+          "due_at": { "type": "string", "format": "date-time", "nullable": true, "example": "2026-08-10T12:00:00Z" }
+        }
+      },
+      "BulkCreateTodosRequest": {
+        "type": "object",
+        "required": ["todos"],
+        "properties": {
+          "todos": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 100,
+            "items": { "$ref": "#/components/schemas/CreateTodoRequest" }
+          }
+        }
+      },
+      "BulkUpdateTodosRequest": {
+        "type": "object",
+        "required": ["todos"],
+        "properties": {
+          "todos": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 100,
+            "items": { "$ref": "#/components/schemas/BulkUpdateTodoItem" }
+          }
+        }
+      },
+      "BulkUpdateTodoItem": {
+        "type": "object",
+        "required": ["id"],
+        "minProperties": 2,
+        "properties": {
+          "id": { "type": "string", "example": "665000000000000000000101" },
+          "title": { "type": "string", "maxLength": 160, "example": "Updated todo title" },
+          "description": { "type": "string", "maxLength": 2000, "example": "Updated description" },
+          "priority": { "type": "string", "enum": ["low", "medium", "high"], "example": "medium" },
+          "tags": { "type": "array", "items": { "type": "string", "maxLength": 50 }, "maxItems": 20, "example": ["work"] },
+          "due_at": { "type": "string", "format": "date-time", "nullable": true, "example": "2026-08-20T09:00:00Z" },
+          "completed": { "type": "boolean", "example": true }
+        }
+      },
+      "BulkDeleteTodosRequest": {
+        "type": "object",
+        "required": ["ids"],
+        "properties": {
+          "ids": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 100,
+            "items": { "type": "string", "example": "665000000000000000000101" }
+          }
+        }
+      },
+      "BulkDeleteResult": {
+        "type": "object",
+        "properties": {
+          "deleted": { "type": "integer", "example": 2 }
         }
       },
       "UpdateTodoRequest": {
@@ -577,6 +906,9 @@
         "properties": {
           "title": { "type": "string", "maxLength": 160, "example": "Updated todo title" },
           "description": { "type": "string", "maxLength": 2000, "example": "Updated description" },
+          "priority": { "type": "string", "enum": ["low", "medium", "high"], "example": "medium" },
+          "tags": { "type": "array", "items": { "type": "string", "maxLength": 50 }, "maxItems": 20, "example": ["work"] },
+          "due_at": { "type": "string", "format": "date-time", "nullable": true, "example": "2026-08-20T09:00:00Z" },
           "completed": { "type": "boolean", "example": true }
         }
       },
@@ -609,10 +941,24 @@
           "id": { "type": "string", "example": "665000000000000000000101" },
           "title": { "type": "string", "example": "Review clean architecture layers" },
           "description": { "type": "string", "example": "Walk through domain, usecase, repository, controller, and route packages." },
+          "priority": { "type": "string", "enum": ["low", "medium", "high"], "example": "medium" },
+          "tags": { "type": "array", "items": { "type": "string" }, "example": ["work"] },
+          "due_at": { "type": "string", "format": "date-time", "nullable": true, "example": "2026-08-20T09:00:00Z" },
           "completed": { "type": "boolean", "example": false },
           "created_at": { "type": "string", "format": "date-time", "example": "2026-05-12T02:00:00Z" },
           "updated_at": { "type": "string", "format": "date-time", "example": "2026-05-12T02:00:00Z" },
-          "completed_at": { "type": "string", "format": "date-time", "nullable": true, "example": "2026-05-12T03:00:00Z" }
+          "completed_at": { "type": "string", "format": "date-time", "nullable": true, "example": "2026-05-12T03:00:00Z" },
+          "deleted_at": { "type": "string", "format": "date-time", "nullable": true, "description": "Set when the todo is soft deleted" }
+        }
+      },
+      "TodoStats": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "example": 10 },
+          "completed": { "type": "integer", "example": 4 },
+          "pending": { "type": "integer", "example": 6 },
+          "overdue": { "type": "integer", "example": 2 },
+          "completion_rate": { "type": "number", "format": "float", "example": 40.0 }
         }
       },
       "AuthResponseEnvelope": {
@@ -670,6 +1016,32 @@
             "items": { "$ref": "#/components/schemas/Todo" }
           },
           "meta": { "$ref": "#/components/schemas/PaginationMeta" }
+        }
+      },
+      "TodoBulkResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": true },
+          "message": { "type": "string", "example": "created" },
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Todo" }
+          }
+        }
+      },
+      "BulkDeleteResultResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": true },
+          "message": { "type": "string", "example": "deleted" },
+          "data": { "$ref": "#/components/schemas/BulkDeleteResult" }
+        }
+      },
+      "TodoStatsResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": true },
+          "data": { "$ref": "#/components/schemas/TodoStats" }
         }
       },
       "PaginationMeta": {

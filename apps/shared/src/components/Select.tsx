@@ -25,7 +25,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         <select
           ref={ref}
           id={inputId}
-          className={`sh-w-full sh-rounded-lg sh-border sh-px-3 sh-py-2 sh-text-sm sh-transition-colors focus:sh-outline-none focus:sh-ring-2 focus:sh-ring-primary-500 focus:sh-ring-offset-2 ${
+          className={`sh-w-full sh-rounded-lg sh-border sh-px-3 sh-py-2 sh-text-sm sh-transition-colors focus:sh-outline-none ${
             error
               ? 'sh-border-red-500 focus:sh-ring-red-500'
               : 'sh-border-gray-300 dark:sh-border-gray-600'

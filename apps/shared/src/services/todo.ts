@@ -1,6 +1,19 @@
 import apiClient from '@/api/client'
 import { TODO_ENDPOINTS } from '@/api/endpoints'
-import type { CreateTodoRequest, UpdateTodoRequest, Todo, TodoListParams, ApiSuccess, ApiListResponse } from '@/types'
+import type {
+  CreateTodoRequest,
+  UpdateTodoRequest,
+  Todo,
+  TodoListParams,
+  TodoStats,
+  ApiSuccess,
+  ApiListResponse,
+  ApiMessageResponse,
+  BulkCreateTodosRequest,
+  BulkUpdateTodosRequest,
+  BulkDeleteTodosRequest,
+  BulkDeleteResult,
+} from '@/types'
 
 export const todoApi = {
   list: (params?: TodoListParams) =>
@@ -16,5 +29,20 @@ export const todoApi = {
     apiClient.patch<ApiSuccess<Todo>>(TODO_ENDPOINTS.update(id), data),
 
   delete: (id: string) =>
-    apiClient.delete<ApiSuccess<{ message: string }>>(TODO_ENDPOINTS.delete(id)),
+    apiClient.delete<ApiMessageResponse>(TODO_ENDPOINTS.delete(id)),
+
+  restore: (id: string) =>
+    apiClient.post<ApiSuccess<Todo>>(TODO_ENDPOINTS.restore(id)),
+
+  bulkCreate: (data: BulkCreateTodosRequest) =>
+    apiClient.post<ApiSuccess<Todo[]>>(TODO_ENDPOINTS.bulkCreate(), data),
+
+  bulkUpdate: (data: BulkUpdateTodosRequest) =>
+    apiClient.patch<ApiSuccess<Todo[]>>(TODO_ENDPOINTS.bulkUpdate(), data),
+
+  bulkDelete: (data: BulkDeleteTodosRequest) =>
+    apiClient.delete<ApiSuccess<BulkDeleteResult>>(TODO_ENDPOINTS.bulkDelete(), { data }),
+
+  stats: () =>
+    apiClient.get<ApiSuccess<TodoStats>>(TODO_ENDPOINTS.stats()),
 }

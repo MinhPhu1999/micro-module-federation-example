@@ -8,6 +8,7 @@ export const todoKeys = {
   list: (params?: TodoListParams) => [...todoKeys.lists(), params] as const,
   details: () => [...todoKeys.all, 'detail'] as const,
   detail: (id: string) => [...todoKeys.details(), id] as const,
+  stats: () => [...todoKeys.all, 'stats'] as const,
 }
 
 export function useTodos(params?: TodoListParams) {

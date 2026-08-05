@@ -13,6 +13,7 @@ export function useCreateTodo() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: todoKeys.lists() })
+      queryClient.invalidateQueries({ queryKey: todoKeys.stats() })
     },
   })
 }
