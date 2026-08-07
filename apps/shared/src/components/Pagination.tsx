@@ -1,4 +1,4 @@
-import { Button } from './Button'
+import { Button } from '@micro-fe/shared/Button'
 import '../index.css'
 
 interface PaginationProps {

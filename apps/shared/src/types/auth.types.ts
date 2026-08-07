@@ -41,3 +41,12 @@ export interface ResetPasswordRequest {
 export interface RefreshTokenRequest {
   refresh_token: string
 }
+
+export interface VerifyEmailRequest {
+  email: string
+  otp: string
+}
+
+export interface ResendVerificationRequest {
+  email: string
+}

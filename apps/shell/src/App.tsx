@@ -1,18 +1,18 @@
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router'
 import { lazy, Suspense, useEffect } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { AuthProvider, useAuth } from 'shared/AuthContext'
-import { ThemeProvider } from 'shared/ThemeContext'
-import { ToastProvider } from 'shared/ToastContext'
-import { Toast } from 'shared/Toast'
-import { I18nProvider } from 'shared/I18nContext'
-import { Spinner } from 'shared/Spinner'
-import { ProtectedRoute } from 'shared/ProtectedRoute'
+import { AuthProvider, useAuth } from '@micro-fe/shared/AuthContext'
+import { ThemeProvider } from '@micro-fe/shared/ThemeContext'
+import { ToastProvider } from '@micro-fe/shared/ToastContext'
+import { Toast } from '@micro-fe/shared/Toast'
+import { I18nProvider } from '@micro-fe/shared/I18nContext'
+import { Spinner } from '@micro-fe/shared/Spinner'
+import { ProtectedRoute } from '@micro-fe/shared/ProtectedRoute'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { AppLayout } from './components/AppLayout'
 import { GoogleCallback } from './components/GoogleCallback'
 import { NotFound } from './pages/NotFound'
-import { setOnUnauthorized } from 'shared/apiClient'
+import { setOnUnauthorized } from '@micro-fe/shared/apiClient'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,6 +24,7 @@ const LoginPage = lazy(() => import('auth/LoginPage'))
 const RegisterPage = lazy(() => import('auth/RegisterPage'))
 const ForgotPasswordPage = lazy(() => import('auth/ForgotPasswordPage'))
 const ResetPasswordPage = lazy(() => import('auth/ResetPasswordPage'))
+const VerifyEmailPage = lazy(() => import('auth/VerifyEmailPage'))
 const TodoPage = lazy(() => import('todo/TodoPage'))
 
 function AxiosInterceptor() {
@@ -62,6 +63,9 @@ function App() {
                 } />
                 <Route path="/reset-password" element={
                   <ErrorBoundary><Suspense fallback={<Spinner />}><ResetPasswordPage /></Suspense></ErrorBoundary>
+                } />
+                <Route path="/verify-email" element={
+                  <ErrorBoundary><Suspense fallback={<Spinner />}><VerifyEmailPage /></Suspense></ErrorBoundary>
                 } />
                 <Route path="/auth/google/callback" element={
                   <ErrorBoundary><GoogleCallback /></ErrorBoundary>

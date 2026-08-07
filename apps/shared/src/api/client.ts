@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { API_BASE_URL, ERROR_MESSAGES } from '@/constants'
-import { getAccessToken, getRefreshToken, setAccessToken, setRefreshToken, clearAuth } from '@/utils/storage'
-import i18n from '@/i18n'
-import { API_PREFIX } from './endpoints'
+import { API_BASE_URL, ERROR_MESSAGES } from "@micro-fe/shared/constants"
+import { getAccessToken, getRefreshToken, setAccessToken, setRefreshToken, clearAuth } from "@micro-fe/shared/storage"
+import i18n from "@micro-fe/shared/i18n"
+import { API_PREFIX } from '@micro-fe/shared/endpoints'
 
 let onUnauthorized: (() => void) | null = null
 

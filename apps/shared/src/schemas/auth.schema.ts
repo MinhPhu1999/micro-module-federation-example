@@ -39,7 +39,16 @@ export const resetPasswordSchema = z.object({
   path: ['confirmNewPassword'],
 })
 
+export const verifyEmailSchema = z.object({
+  email: emailSchema,
+  otp: z
+    .string()
+    .length(6, 'validation.otp_length')
+    .regex(/^\d+$/, 'validation.otp_digits'),
+})
+
 export type LoginForm = z.infer<typeof loginSchema>
 export type RegisterForm = z.infer<typeof registerSchema>
 export type ForgotPasswordForm = z.infer<typeof forgotPasswordSchema>
 export type ResetPasswordForm = z.infer<typeof resetPasswordSchema>
+export type VerifyEmailForm = z.infer<typeof verifyEmailSchema>

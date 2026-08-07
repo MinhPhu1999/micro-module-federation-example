@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next'
-import { Table, type Column } from 'shared/Table'
-import { Button } from 'shared/Button'
-import { Checkbox } from 'shared/Checkbox'
-import { formatDate } from 'shared/formatDate'
-import type { Todo, TodoPriority, TodoSortBy, TodoSortOrder } from 'shared/types'
+import { Table, type Column } from '@micro-fe/shared/Table'
+import { Button } from '@micro-fe/shared/Button'
+import { Checkbox } from '@micro-fe/shared/Checkbox'
+import { formatDate } from '@micro-fe/shared/formatDate'
+import type { Todo, TodoPriority, TodoSortBy, TodoSortOrder } from '@micro-fe/shared/types'
 
 interface TodoTableProps {
   todos: Todo[]

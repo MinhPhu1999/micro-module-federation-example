@@ -10,7 +10,7 @@ import {
   setUser,
   removeUser,
   clearAuth,
-} from '../storage'
+} from '@micro-fe/shared/storage'
 
 describe('storage', () => {
   beforeEach(() => {

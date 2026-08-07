@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Skeleton } from './Skeleton'
+import { Skeleton } from '@micro-fe/shared/Skeleton'
 import '../index.css'
 
 export interface Column<T> {

@@ -189,6 +189,66 @@
         }
       }
     },
+    "/api/v1/auth/verify-email": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Verify email with OTP",
+        "description": "Confirms the user's email address with the OTP sent at registration. Idempotent once the email is already verified.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/VerifyEmailRequest" },
+              "example": { "email": "demo@example.com", "otp": "123456" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email verified",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MessageResponse" },
+                "example": { "success": true, "message": "email verified" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "429": { "$ref": "#/components/responses/RateLimited" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/api/v1/auth/verify-email/resend": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Resend email verification OTP",
+        "description": "Sends a fresh email verification OTP. Returns the same message whether the email exists or not to avoid user enumeration.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ResendVerificationRequest" },
+              "example": { "email": "demo@example.com" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verification OTP sent",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MessageResponse" },
+                "example": { "success": true, "message": "if the email exists, a verification otp has been sent" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "429": { "$ref": "#/components/responses/RateLimited" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
     "/api/v1/auth/google/url": {
       "get": {
         "tags": ["Auth"],
@@ -307,6 +367,82 @@
             }
           },
           "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "Update current user profile (name, picture)",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateProfileRequest" },
+              "example": { "name": "New Display Name", "picture": "https://example.com/avatar.png" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile updated",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserResponse" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/api/v1/auth/change-password": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Change current user password and revoke all refresh tokens",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ChangePasswordRequest" },
+              "example": { "current_password": "password123", "new_password": "newSecurePass99" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MessageResponse" },
+                "example": { "success": true, "message": "password changed" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/api/v1/auth/google/login": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Start Google sign-in (redirects the browser to Google's consent screen)",
+        "responses": {
+          "307": { "description": "Redirect to Google OAuth consent screen" },
+          "503": {
+            "description": "Google sign-in is not configured",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "example": {
+                  "success": false,
+                  "error": { "code": "GOOGLE_AUTH_UNAVAILABLE", "message": "google sign in is not configured" }
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -575,10 +711,13 @@
           "404": { "$ref": "#/components/responses/NotFound" },
           "500": { "$ref": "#/components/responses/InternalServerError" }
         }
-      },
+      }
+    },
+    "/api/v1/todos/{id}/restore": {
       "post": {
         "tags": ["Todos"],
         "summary": "Restore a deleted todo",
+        "description": "Restores a soft-deleted todo so it appears in list, detail, and stats endpoints again.",
         "security": [{ "BearerAuth": [] }],
         "parameters": [{ "$ref": "#/components/parameters/TodoID" }],
         "responses": {
@@ -831,6 +970,44 @@
         "required": ["refresh_token"],
         "properties": {
           "refresh_token": { "type": "string", "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." }
+        }
+      },
+      "UpdateProfileRequest": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "name": { "type": "string", "example": "New Display Name" },
+          "picture": { "type": "string", "example": "https://example.com/avatar.png" }
+        }
+      },
+      "ChangePasswordRequest": {
+        "type": "object",
+        "required": ["current_password", "new_password"],
+        "properties": {
+          "current_password": { "type": "string", "example": "password123" },
+          "new_password": { "type": "string", "minLength": 8, "maxLength": 72, "example": "newSecurePass99" }
+        }
+      },
+      "MessageResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": true },
+          "message": { "type": "string", "example": "ok" }
+        }
+      },
+      "VerifyEmailRequest": {
+        "type": "object",
+        "required": ["email", "otp"],
+        "properties": {
+          "email": { "type": "string", "format": "email", "example": "demo@example.com" },
+          "otp": { "type": "string", "minLength": 6, "maxLength": 6, "example": "123456" }
+        }
+      },
+      "ResendVerificationRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string", "format": "email", "example": "demo@example.com" }
         }
       },
       "CreateTodoRequest": {

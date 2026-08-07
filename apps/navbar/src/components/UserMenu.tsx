@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button } from 'shared/Button'
+import { Button } from '@micro-fe/shared/Button'
 
 interface UserMenuProps {
   user: { name?: string; email?: string; picture?: string } | null

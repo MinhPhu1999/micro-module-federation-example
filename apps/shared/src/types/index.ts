@@ -1,4 +1,4 @@
-export type { User, AuthPayload, RegisterRequest, LoginRequest, ForgotPasswordRequest, ResetPasswordRequest, RefreshTokenRequest } from './auth.types'
+export type { User, AuthPayload, RegisterRequest, LoginRequest, ForgotPasswordRequest, ResetPasswordRequest, RefreshTokenRequest, VerifyEmailRequest, ResendVerificationRequest } from '@micro-fe/shared/auth.types'
 export type {
   Todo,
   TodoPriority,
@@ -13,5 +13,5 @@ export type {
   BulkUpdateTodosRequest,
   BulkDeleteTodosRequest,
   BulkDeleteResult,
-} from './todo.types'
-export type { ErrorCode, PaginationMeta, ApiSuccess, ApiListResponse, ApiMessageResponse, ApiError, ApiResponse } from './api.types'
+} from '@micro-fe/shared/todo.types'
+export type { ErrorCode, PaginationMeta, ApiSuccess, ApiListResponse, ApiMessageResponse, ApiError, ApiResponse } from '@micro-fe/shared/api.types'

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { todoApi } from '@/services/todo'
-import type { TodoListParams } from '@/types'
+import { todoApi } from "@micro-fe/shared/todoApi"
+import type { TodoListParams } from "@micro-fe/shared/types"
 
 export const todoKeys = {
   all: ['todos'] as const,

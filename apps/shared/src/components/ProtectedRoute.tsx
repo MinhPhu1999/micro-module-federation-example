@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { Navigate } from 'react-router'
-import { useAuth } from '@/contexts/AuthContext'
-import { Spinner } from './Spinner'
+import { useAuth } from '@micro-fe/shared/AuthContext'
+import { Spinner } from '@micro-fe/shared/Spinner'
 import '../index.css'
 
 interface ProtectedRouteProps {

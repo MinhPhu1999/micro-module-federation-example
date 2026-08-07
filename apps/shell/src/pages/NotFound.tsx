@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router'
 import { useTranslation } from 'react-i18next'
-import { EmptyState } from 'shared/EmptyState'
+import { EmptyState } from '@micro-fe/shared/EmptyState'
 
 export const NotFound = () => {
   const navigate = useNavigate()

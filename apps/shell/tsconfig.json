@@ -14,13 +14,29 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "shared/*": ["../shared/dist/@mf-types/*", "./@mf-types/shared/*"],
-      "auth/*": ["../auth/dist/@mf-types/*", "./@mf-types/auth/*"],
-      "todo/*": ["../todo/dist/@mf-types/*", "./@mf-types/todo/*"],
-      "navbar/*": ["../navbar/dist/@mf-types/*", "./@mf-types/navbar/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "auth/*": [
+        "../auth/dist/@mf-types/*",
+        "./@mf-types/auth/*"
+      ],
+      "todo/*": [
+        "../todo/dist/@mf-types/*",
+        "./@mf-types/todo/*"
+      ],
+      "navbar/*": [
+        "../navbar/dist/@mf-types/*",
+        "./@mf-types/navbar/*"
+      ]
     }
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
 }

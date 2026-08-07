@@ -1,7 +1,7 @@
 import { BrowserRouter } from 'react-router'
-import { AuthProvider } from 'shared/AuthContext'
-import { ThemeProvider } from 'shared/ThemeContext'
-import { I18nProvider } from 'shared/I18nContext'
+import { AuthProvider } from '@micro-fe/shared/AuthContext'
+import { ThemeProvider } from '@micro-fe/shared/ThemeContext'
+import { I18nProvider } from '@micro-fe/shared/I18nContext'
 import { Navbar } from './components/Navbar'
 
 function App() {

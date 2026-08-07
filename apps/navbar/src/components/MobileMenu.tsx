@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
-import { Button } from 'shared/Button'
-import { LanguageSwitcher } from 'shared/LanguageSwitcher'
+import { Button } from '@micro-fe/shared/Button'
+import { LanguageSwitcher } from '@micro-fe/shared/LanguageSwitcher'
 
 interface MobileMenuProps {
   isAuthenticated: boolean

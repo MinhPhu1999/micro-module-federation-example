@@ -1,5 +1,5 @@
 import type { ReactNode, ButtonHTMLAttributes } from 'react'
-import { Spinner } from './Spinner'
+import { Spinner } from '@micro-fe/shared/Spinner'
 import '../index.css'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

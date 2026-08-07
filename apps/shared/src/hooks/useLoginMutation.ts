@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
-import { authApi } from '@/services/auth'
-import type { LoginRequest, AuthPayload } from '@/types'
+import { authApi } from "@micro-fe/shared/authApi"
+import type { LoginRequest, AuthPayload } from "@micro-fe/shared/types"
 
 export function useLoginMutation() {
   return useMutation({

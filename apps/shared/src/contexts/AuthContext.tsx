@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
-import type { User, AuthPayload } from '@/types'
-import { getAccessToken, getRefreshToken, setAccessToken, setRefreshToken, setUser, clearAuth } from '@/utils/storage'
-import { authApi } from '@/services/auth'
+import type { User, AuthPayload } from "@micro-fe/shared/types"
+import { getAccessToken, getRefreshToken, setAccessToken, setRefreshToken, setUser, clearAuth } from "@micro-fe/shared/storage"
+import { authApi } from "@micro-fe/shared/authApi"
 
 interface AuthState {
   user: User | null

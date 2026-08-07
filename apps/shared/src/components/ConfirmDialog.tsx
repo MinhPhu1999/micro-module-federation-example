@@ -1,5 +1,5 @@
-import { Button } from './Button'
-import { Modal } from './Modal'
+import { Button } from '@micro-fe/shared/Button'
+import { Modal } from '@micro-fe/shared/Modal'
 import '../index.css'
 
 interface ConfirmDialogProps {

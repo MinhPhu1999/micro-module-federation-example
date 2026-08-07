@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { todoApi } from '@/services/todo'
-import { todoKeys } from './useTodos'
+import { todoApi } from "@micro-fe/shared/todoApi"
+import { todoKeys } from '@micro-fe/shared/useTodos'
 
 export function useRestoreTodo() {
   const queryClient = useQueryClient()

@@ -1,7 +1,7 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react'
 import { withTranslation } from 'react-i18next'
 import type { WithTranslation } from 'react-i18next'
-import { ErrorState } from 'shared/ErrorState'
+import { ErrorState } from '@micro-fe/shared/ErrorState'
 
 interface Props extends WithTranslation {
   children: ReactNode

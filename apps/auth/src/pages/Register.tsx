@@ -2,12 +2,12 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router'
 import { useTranslation } from 'react-i18next'
-import { Input } from 'shared/Input'
-import { Button } from 'shared/Button'
-import { useToast } from 'shared/ToastContext'
-import { useRegisterMutation } from 'shared/useRegisterMutation'
-import { fieldError } from 'shared/fieldError'
-import { registerSchema, type RegisterForm } from 'shared/schemas'
+import { Input } from '@micro-fe/shared/Input'
+import { Button } from '@micro-fe/shared/Button'
+import { useToast } from '@micro-fe/shared/ToastContext'
+import { useRegisterMutation } from '@micro-fe/shared/useRegisterMutation'
+import { fieldError } from '@micro-fe/shared/fieldError'
+import { registerSchema, type RegisterForm } from '@micro-fe/shared/schemas'
 import { AuthLayout } from '../layouts/AuthLayout'
 import '../index.css'
 
@@ -26,7 +26,7 @@ export const RegisterPage = () => {
     try {
       await registerMutation.mutateAsync({ email: data.email, password: data.password, name: data.name })
       toast.success(t('auth.register_success'))
-      navigate('/login', { replace: true })
+      navigate(`/verify-email?email=${encodeURIComponent(data.email)}`, { replace: true })
     } catch (err) {
       const error = err as { displayMessage?: string }
       toast.error(error.displayMessage || t('auth.register_failed'))

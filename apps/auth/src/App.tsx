@@ -1,16 +1,17 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router'
 import { lazy, Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AuthProvider, useAuth } from 'shared/AuthContext'
-import { ToastProvider } from 'shared/ToastContext'
-import { Toast } from 'shared/Toast'
-import { I18nProvider } from 'shared/I18nContext'
-import { Spinner } from 'shared/Spinner'
+import { AuthProvider, useAuth } from '@micro-fe/shared/AuthContext'
+import { ToastProvider } from '@micro-fe/shared/ToastContext'
+import { Toast } from '@micro-fe/shared/Toast'
+import { I18nProvider } from '@micro-fe/shared/I18nContext'
+import { Spinner } from '@micro-fe/shared/Spinner'
 
 const Login = lazy(() => import('./pages/Login'))
 const Register = lazy(() => import('./pages/Register'))
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'))
 const ResetPassword = lazy(() => import('./pages/ResetPassword'))
+const VerifyEmail = lazy(() => import('./pages/VerifyEmail'))
 
 function AuthRoutes() {
   const { isAuthenticated, isLoading } = useAuth()
@@ -42,6 +43,7 @@ function AuthRoutes() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Suspense>

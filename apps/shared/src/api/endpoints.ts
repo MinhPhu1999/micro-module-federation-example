@@ -10,6 +10,8 @@ export const AUTH_ENDPOINTS = {
   me: () => `${API_PREFIX}/auth/me`,
   refresh: () => `${API_PREFIX}/auth/refresh`,
   logout: () => `${API_PREFIX}/auth/logout`,
+  verifyEmail: () => `${API_PREFIX}/auth/verify-email`,
+  verifyEmailResend: () => `${API_PREFIX}/auth/verify-email/resend`,
 } as const
 
 export const TODO_ENDPOINTS = {

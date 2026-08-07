@@ -1,6 +1,6 @@
-import { useI18n } from '@/contexts/I18nContext'
-import { Button } from './Button'
-import { Dropdown } from './Dropdown'
+import { useI18n } from '@micro-fe/shared/I18nContext'
+import { Button } from '@micro-fe/shared/Button'
+import { Dropdown } from '@micro-fe/shared/Dropdown'
 import '../index.css'
 
 export const LanguageSwitcher = () => {

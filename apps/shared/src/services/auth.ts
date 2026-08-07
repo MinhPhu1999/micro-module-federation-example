@@ -1,14 +1,16 @@
-import apiClient from '@/api/client'
-import { AUTH_ENDPOINTS } from '@/api/endpoints'
+import apiClient from "@micro-fe/shared/apiClient"
+import { AUTH_ENDPOINTS } from "@micro-fe/shared/endpoints"
 import type {
   RegisterRequest,
   LoginRequest,
   ForgotPasswordRequest,
   ResetPasswordRequest,
   RefreshTokenRequest,
+  VerifyEmailRequest,
+  ResendVerificationRequest,
   AuthPayload,
   ApiSuccess,
-} from '@/types'
+} from "@micro-fe/shared/types"
 
 export const authApi = {
   register: (data: RegisterRequest) =>
@@ -34,4 +36,10 @@ export const authApi = {
 
   logout: (data: RefreshTokenRequest) =>
     apiClient.post<ApiSuccess<{ message: string }>>(AUTH_ENDPOINTS.logout(), data),
+
+  verifyEmail: (data: VerifyEmailRequest) =>
+    apiClient.post<ApiSuccess<{ message: string }>>(AUTH_ENDPOINTS.verifyEmail(), data),
+
+  verifyEmailResend: (data: ResendVerificationRequest) =>
+    apiClient.post<ApiSuccess<{ message: string }>>(AUTH_ENDPOINTS.verifyEmailResend(), data),
 }

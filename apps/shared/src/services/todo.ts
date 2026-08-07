@@ -1,5 +1,5 @@
-import apiClient from '@/api/client'
-import { TODO_ENDPOINTS } from '@/api/endpoints'
+import apiClient from "@micro-fe/shared/apiClient"
+import { TODO_ENDPOINTS } from "@micro-fe/shared/endpoints"
 import type {
   CreateTodoRequest,
   UpdateTodoRequest,
@@ -13,7 +13,7 @@ import type {
   BulkUpdateTodosRequest,
   BulkDeleteTodosRequest,
   BulkDeleteResult,
-} from '@/types'
+} from "@micro-fe/shared/types"
 
 export const todoApi = {
   list: (params?: TodoListParams) =>

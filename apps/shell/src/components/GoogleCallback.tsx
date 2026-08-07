@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import { useSearchParams, useNavigate } from 'react-router'
 import { useTranslation } from 'react-i18next'
-import { authApi } from 'shared/authApi'
-import { useAuth } from 'shared/AuthContext'
-import { useToast } from 'shared/ToastContext'
-import { Spinner } from 'shared/Spinner'
+import { authApi } from '@micro-fe/shared/authApi'
+import { useAuth } from '@micro-fe/shared/AuthContext'
+import { useToast } from '@micro-fe/shared/ToastContext'
+import { Spinner } from '@micro-fe/shared/Spinner'
 
 export const GoogleCallback = () => {
   const [params] = useSearchParams()

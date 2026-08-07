@@ -1,5 +1,5 @@
-import { useToast } from '@/contexts/ToastContext'
-import { Button } from './Button'
+import { useToast } from '@micro-fe/shared/ToastContext'
+import { Button } from '@micro-fe/shared/Button'
 import '../index.css'
 
 export const Toast = () => {

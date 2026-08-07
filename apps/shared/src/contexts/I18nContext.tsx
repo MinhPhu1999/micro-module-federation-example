@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import i18n, { LANG_KEY } from '@/i18n'
+import i18n, { LANG_KEY } from "@micro-fe/shared/i18n"
 
 interface I18nContextValue {
   locale: string

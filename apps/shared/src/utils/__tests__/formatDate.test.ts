@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { formatDate } from '../formatDate'
+import { formatDate } from '@micro-fe/shared/formatDate'
 
 describe('formatDate', () => {
   it('formats a Date object with default locale', () => {

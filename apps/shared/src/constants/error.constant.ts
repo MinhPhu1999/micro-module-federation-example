@@ -9,4 +9,13 @@ export const ERROR_MESSAGES: Record<string, string> = {
   GOOGLE_AUTH_UNAVAILABLE: 'error.google_auth_unavailable',
   GOOGLE_PROFILE_UNAVAILABLE: 'error.google_profile_unavailable',
   INTERNAL_SERVER_ERROR: 'error.internal_server_error',
+  RATE_LIMITED: 'error.rate_limited',
+  INVALID_AUTH_REQUEST: 'error.invalid_auth_request',
+  INVALID_PASSWORD: 'error.invalid_password',
+  TOO_MANY_LOGIN_ATTEMPTS: 'error.too_many_login_attempts',
+  EMAIL_NOT_VERIFIED: 'error.email_not_verified',
+  INVALID_OTP: 'error.invalid_otp',
+  OTP_EXPIRED: 'error.otp_expired',
+  INVALID_GOOGLE_OAUTH_STATE: 'error.invalid_google_oauth_state',
+  GOOGLE_EMAIL_NOT_VERIFIED: 'error.google_email_not_verified',
 }

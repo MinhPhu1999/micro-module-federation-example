@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useDebounce } from 'shared/useDebounce'
-import { Input } from 'shared/Input'
-import { Select } from 'shared/Select'
-import { Checkbox } from 'shared/Checkbox'
-import type { TodoPriority, TodoSortBy, TodoSortOrder } from 'shared/types'
+import { useDebounce } from '@micro-fe/shared/useDebounce'
+import { Input } from '@micro-fe/shared/Input'
+import { Select } from '@micro-fe/shared/Select'
+import { Checkbox } from '@micro-fe/shared/Checkbox'
+import type { TodoPriority, TodoSortBy, TodoSortOrder } from '@micro-fe/shared/types'
 
 export interface TodoFiltersState {
   search: string

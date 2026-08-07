@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { Outlet } from 'react-router'
-import { Spinner } from 'shared/Spinner'
+import { Spinner } from '@micro-fe/shared/Spinner'
 import { ErrorBoundary } from './ErrorBoundary'
 
 const Navbar = lazy(() => import('navbar/Navbar'))

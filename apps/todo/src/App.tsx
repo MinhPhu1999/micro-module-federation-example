@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Spinner } from 'shared/Spinner'
-import { AuthProvider, useAuth } from 'shared/AuthContext'
-import { ToastProvider } from 'shared/ToastContext'
-import { Toast } from 'shared/Toast'
-import { I18nProvider } from 'shared/I18nContext'
+import { Spinner } from '@micro-fe/shared/Spinner'
+import { AuthProvider, useAuth } from '@micro-fe/shared/AuthContext'
+import { ToastProvider } from '@micro-fe/shared/ToastContext'
+import { Toast } from '@micro-fe/shared/Toast'
+import { I18nProvider } from '@micro-fe/shared/I18nContext'
 import { TodoListPage } from './pages/TodoList'
 
 const queryClient = new QueryClient({

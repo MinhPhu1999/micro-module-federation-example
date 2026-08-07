@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, type ReactNode } from 'react'
-import { Button } from './Button'
+import { Button } from '@micro-fe/shared/Button'
 import '../index.css'
 
 interface DropdownItem {
